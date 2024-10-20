@@ -4,7 +4,7 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { deletePost, disLikePost, getPostById, likePost } from "../../store/postSlice";
+import { createComment, deletePost, disLikePost, getPostById, likePost } from "../../store/postSlice";
 import parse from "html-react-parser"
 import Box from '@mui/material/Box';
 import * as React from 'react';
@@ -34,7 +34,7 @@ export default function Post() {
     const dispatch = useDispatch()
     const post = useSelector(state => state.post.singlePost)
     const { user } = useSelector(state => state.auth)
-    const [comment,setComment]=React.useState('')
+    const [commentText,setCommentText]=React.useState('')
 
     // console.log("Postid",postId.postId);
     // console.log("AAAAA",post);
@@ -57,21 +57,22 @@ export default function Post() {
     }
 
     const handleInputChange=(e)=>{
-        setComment(e.target.value)
+        setCommentText(e.target.value)
     }
 
     const handleSubmit=()=>{
-        if(comment.trim()){
-            console.log("comment ====>",comment);
+        if(commentText.trim()){
+            const comment={
+                title:commentText.trim()
+            }
+            // console.log("comment ====>",comment);
+            dispatch(createComment({ postId: post.postId, comment }));
+            setCommentText('')
         }
         else{
             console.log("please enter comment");
             
         }
-    }
-
-    const handleCreateComment=()=>{
-
     }
 
     useEffect(() => {
@@ -129,7 +130,7 @@ export default function Post() {
                     </div>
                     <div>
                         <h2 className="text-white bg-blue-600 w-full p-1 mt-[60px]">LEAVE A REPLY</h2>
-                        <input onChange={handleInputChange} className="p-4 border-[1.5px] w-full pb-[60px] outline-none focus:border-[1.5px]" type="text " placeholder="Write a comment ...." value={comment} />
+                        <input onChange={handleInputChange} className="p-4 border-[1.5px] w-full pb-[60px] outline-none focus:border-[1.5px]" type="text " placeholder="Write a comment ...." value={commentText} />
                         <div className="border-[1.5px] w-full border-t-0  p-4 flex flex-col  items-end">
                             <button onClick={handleSubmit}  className="border-[1.5px] p-1 px-4 text-gray-400 hover:bg-gray-200 hover:text-gray-500">Comment</button>
                         </div>

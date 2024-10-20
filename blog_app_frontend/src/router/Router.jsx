@@ -8,6 +8,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 import EditPost from "../pages/EditPost";
+import SearchResultPage from "../pages/SearchResultPage";
 
 export const Router=createBrowserRouter([
     {
@@ -49,6 +50,10 @@ export const Router=createBrowserRouter([
             {
                 path:"/register",
                 element:<RegisterPage/>
+            },
+            {
+                path:"/search",
+                element:<SearchResultPage/>
             }
         ]
     }

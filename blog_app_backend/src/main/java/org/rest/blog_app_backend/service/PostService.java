@@ -4,8 +4,6 @@ import org.rest.blog_app_backend.entity.Comment;
 import org.rest.blog_app_backend.entity.Post;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 public interface PostService {
 
     Post createPost(Post post,String jwt);
@@ -20,5 +18,7 @@ public interface PostService {
 
     Post updatePost(Post post);
 
-    List<Post> getAllPost(int pageNumber, int pageSize);
+    Page<Post> getAllPost(int pageNumber, int pageSize);
+
+    Page<Post> getPostBySearch(String title,int pageNumber,int pageSize);
 }

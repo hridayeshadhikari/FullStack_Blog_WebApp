@@ -26,9 +26,9 @@ export const createPost = createAsyncThunk(`/api/post/create`, async (postData, 
     }
 })
 
-export const getAllPost = createAsyncThunk("/posts", async (_, thunkAPI) => {
+export const getAllPost = createAsyncThunk("/posts", async (page, thunkAPI) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/posts`);
+        const response = await axios.get(`${API_BASE_URL}/posts?page=${page}`);
         // console.log("====>", response.data);
         return response.data;
     } catch (error) {
@@ -91,9 +91,25 @@ export const disLikePost = createAsyncThunk("/post/dislike", async (postId, thun
     }
 })
 
-export const createComment = createAsyncThunk("/post/comment", async (postId,comment, thunkAPI) => {
+export const createComment = createAsyncThunk("/post/comment", async ({postId,comment}, thunkAPI) => {
+    console.log("====>",comment);
+    
     try {
         const response = await api.post(`/api/post/comment/${postId}`,comment)
+        console.log(response.data);
+        
+        return response.data;
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+export const searchPost = createAsyncThunk("/post/search", async (title,page, thunkAPI) => {
+    try {
+        const response = await api.post(`/post/search?title=${title}&page=${page}`)
         return response.data;
     } catch (error) {
         const message = error.response && error.response.data.message
@@ -152,6 +168,11 @@ const postSlice = createSlice({
                 state.isError = true
                 state.isLoading = false
                 state.message = action.payload
+            })
+            .addCase(searchPost.fulfilled,(state,action)=>{
+                state.isLoading=false
+                state.isError=false
+                state.posts=action.payload
             })
             ;
 

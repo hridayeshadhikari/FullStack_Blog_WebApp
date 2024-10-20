@@ -5,6 +5,7 @@ import org.rest.blog_app_backend.entity.Post;
 import org.rest.blog_app_backend.entity.User;
 import org.rest.blog_app_backend.service.PostService;
 import org.rest.blog_app_backend.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -89,12 +90,21 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<Post>> getPostByPage(@RequestParam(defaultValue = "1") int page,
-                                                    @RequestParam(defaultValue = "5") int sizePerPage){
+    public ResponseEntity<Page<Post>> getPostByPage(@RequestParam(defaultValue = "1") int page,
+                                                    @RequestParam(defaultValue = "4") int sizePerPage){
 
-        List<Post> getPostByPage=postService.getAllPost(page,sizePerPage);
+        Page<Post> getPostByPage=postService.getAllPost(page,sizePerPage);
+
+
         return new ResponseEntity<>(getPostByPage,HttpStatus.OK);
 
+    }
+
+    @GetMapping("/post/search")
+    public ResponseEntity<Page<Post>> getPostBySearch(@RequestParam String title,@RequestParam(defaultValue = "1") int pageNumber,
+                                                      @RequestParam(defaultValue = "4") int pageSize){
+        Page<Post> getPostBySearch=postService.getPostBySearch(title,pageNumber,pageSize);
+        return new ResponseEntity<>(getPostBySearch,HttpStatus.OK);
     }
 
 }

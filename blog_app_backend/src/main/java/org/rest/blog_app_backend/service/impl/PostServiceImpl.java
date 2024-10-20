@@ -10,10 +10,7 @@ import org.rest.blog_app_backend.repository.CommentRepository;
 import org.rest.blog_app_backend.repository.PostRepository;
 import org.rest.blog_app_backend.service.PostService;
 import org.rest.blog_app_backend.service.UserService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -119,12 +116,35 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllPost(int pageNumber, int pageSize) {
-        Pageable p= PageRequest.of(pageNumber,pageSize, Sort.by("postDate").ascending());
-        Page<Post> posts=postRepository.findAll(p);
-        List<Post> getPost=posts.getContent();
+    public Page<Post> getAllPost(int pageNumber, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNumber,pageSize, Sort.by("postDate").ascending());
+        List<Post> getPost =postRepository.findAll();
+
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), getPost.size());
+
+        List<Post> pageContent = getPost.subList(startIndex, endIndex);
+        Page<Post> posts = new PageImpl<>(pageContent, pageable, getPost.size());
+        return posts;
+    }
+
+    @Override
+    public Page<Post> getPostBySearch(String title,int pageNumber,int pageSize) {
+        Pageable pageable=PageRequest.of(pageNumber,pageSize);
+        Page<Post> getPost =postRepository.findByTitleContainingIgnoreCase(title,pageable);
         return getPost;
     }
+
+
+//    public List<Post> getPostBySearch(String title,int pageNumber,int pageSize) {
+//        Pageable pageable= PageRequest.of(pageNumber,pageSize);
+//        List<Post> getPost =postRepository.findByTitleEqualsIgnoreCase(title);
+////        int startIndex = (int) pageable.getOffset();
+////        int endIndex = Math.min(startIndex + pageable.getPageSize(), getPost.size());
+////        List<Post> pageContent = getPost.subList(startIndex, endIndex);
+////        Page<Post> posts = new PageImpl<>(pageContent, pageable, getPost.size());
+//        return getPost;
+//    }
 
 
 }

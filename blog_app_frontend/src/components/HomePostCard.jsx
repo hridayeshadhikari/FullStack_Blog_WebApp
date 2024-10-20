@@ -24,6 +24,14 @@ const HomePostCard = ({ post }) => {
         dispatch(disLikePost(postId))
     }
 
+    const handleNavigate=(postId)=>{
+        navigate(`/post/${postId}`)
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant',  
+        });
+    }
+
     return (
         <div className="bg-white max-w-[380px] md:max-w-[700px] lg:max-w-[1250px] mx-auto ">
             <div className="w-full flex justify-center mb-4 relative">
@@ -34,7 +42,7 @@ const HomePostCard = ({ post }) => {
                 />
             </div>
             <div className="w-full space-y-5 px-10 ">
-                <h1 className="text-4xl font-bold hover:text-blue-600">{post.title}</h1>
+                <a className="text-4xl font-bold hover:text-blue-600 cursor-pointer" onClick={()=>handleNavigate(post?.postId)}>{post.title}</a>
                 <div className='flex justify-between '>
                     <p className='text-gray-400'>written by <u className='underline decoration-blue-600 underline-offset-4 decoration-[1.5px]'>{post.author.firstName + " " + post.author.lastName}</u></p>
                     <div className='space-x-4 flex'>
@@ -45,7 +53,7 @@ const HomePostCard = ({ post }) => {
                 <p className='text-gray-700'>{parse(post.content.split(' ').slice(0, 50).join(' '))}</p>
                 <hr />
                 <div className='flex justify-between'>
-                    <u className='text-gray-400 underline decoration-blue-600 underline-offset-4 decoration-[1.5px] hover:text-blue-600'><Link onClick={()=>navigate(`/post/${post?.postId}`)}>Continue reading</Link></u>
+                    <u className='text-gray-400 underline decoration-blue-600 underline-offset-4 decoration-[1.5px] hover:text-blue-600'><Link onClick={()=>handleNavigate(post?.postId)}>Continue reading</Link></u>
                     <div className='flex'><p className='text-gray-400'>{daysPassed} day ago</p>
                         <ModeCommentIcon className='text-orange-600 ml-5' /><p className='text-gray-400'>{post.comments.length} comments</p>
                     </div>
