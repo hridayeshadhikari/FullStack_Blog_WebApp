@@ -24,7 +24,7 @@ public class Post {
     private List<User> liked=new ArrayList<>();
     private List<User> disliked=new ArrayList<>();
     private List<Comment> comments=new ArrayList<>();
-    private int categoryId;
+    private String category;
     private LocalDateTime postDate;
     private User author;
 }

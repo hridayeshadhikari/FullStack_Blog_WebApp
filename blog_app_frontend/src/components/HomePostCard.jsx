@@ -4,8 +4,6 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ModeCommentIcon from '@mui/icons-material/ModeComment';
 import parse from 'html-react-parser'
 import { Link, useNavigate } from 'react-router-dom';
-import { disLikePost, likePost } from '../store/postSlice';
-import { useDispatch } from 'react-redux';
 
 const HomePostCard = ({ post }) => {
     // console.log("----->",post);
@@ -15,14 +13,8 @@ const HomePostCard = ({ post }) => {
     const timeDifferenceMs = currentDate - createdAtDate;
     const daysDifference = timeDifferenceMs / (1000 * 60 * 60 * 24);
     const daysPassed = Math.round(daysDifference);
-    const dispatch=useDispatch()
 
-    const handleLikePost=(postId)=>{
-        dispatch(likePost(postId))
-    }
-    const handleDisLikePost=(postId)=>{
-        dispatch(disLikePost(postId))
-    }
+   
 
     const handleNavigate=(postId)=>{
         navigate(`/post/${postId}`)
@@ -36,7 +28,8 @@ const HomePostCard = ({ post }) => {
         <div className="bg-white max-w-[380px] md:max-w-[700px] lg:max-w-[1250px] mx-auto ">
             <div className="w-full flex justify-center mb-4 relative">
                 <img
-                    className='h-[20rem]'
+                    onClick={()=>handleNavigate(post?.postId)}
+                    className='h-[20rem] cursor-pointer'
                     src={post.featuredImage}
                     alt=""
                 />
@@ -46,8 +39,8 @@ const HomePostCard = ({ post }) => {
                 <div className='flex justify-between '>
                     <p className='text-gray-400'>written by <u className='underline decoration-blue-600 underline-offset-4 decoration-[1.5px]'>{post.author.firstName + " " + post.author.lastName}</u></p>
                     <div className='space-x-4 flex'>
-                        <p className='text-blue-600 hover:text-gray-500'><ThumbUpOffAltIcon onClick={()=>handleLikePost(post.postId)}/>{post.liked?.length}</p>
-                        <p className='text-red-500 hover:text-gray-500'><ThumbDownOffAltIcon onClick={()=>handleDisLikePost(post.postId)}/>{post.disliked?.length}</p>
+                        <p className='text-blue-600 '><ThumbUpOffAltIcon />{post.liked?.length}</p>
+                        <p className='text-red-500 '><ThumbDownOffAltIcon />{post.disliked?.length}</p>
                     </div>
                 </div>
                 <p className='text-gray-700'>{parse(post.content.split(' ').slice(0, 50).join(' '))}</p>

@@ -56,7 +56,9 @@ public class AppConfig {
                 CorsConfiguration cfg=new CorsConfiguration();
                 cfg.setAllowedOrigins(Arrays.asList(
                         "http://localhost:3000/",
-                        "http://localhost:5173/"
+                        "http://localhost:5173/",
+                        "https://full-stack-blog-web-app.vercel.app/",
+                        "https://full-stack-blog-web-app.vercel.app"
                 ));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowedHeaders(Collections.singletonList("*"));

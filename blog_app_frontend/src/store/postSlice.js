@@ -8,9 +8,12 @@ const initialState = {
     isSuccess: false,
     singlePost: null,
     posts: [],
+    popularPost: [],
+    latestPost: [],
     like: null,
     dislike: null,
-    comment: null
+    comment: null,
+    searchResult: []
 }
 
 export const createPost = createAsyncThunk(`/api/post/create`, async (postData, thunkAPI) => {
@@ -82,6 +85,7 @@ export const likePost = createAsyncThunk("/post/like", async (postId, thunkAPI) 
 export const disLikePost = createAsyncThunk("/post/dislike", async (postId, thunkAPI) => {
     try {
         const response = await api.post(`/api/post/dislike/${postId}`)
+        console.log("disliked post ==> ", response.data);
         return response.data;
     } catch (error) {
         const message = error.response && error.response.data.message
@@ -91,13 +95,13 @@ export const disLikePost = createAsyncThunk("/post/dislike", async (postId, thun
     }
 })
 
-export const createComment = createAsyncThunk("/post/comment", async ({postId,comment}, thunkAPI) => {
-    console.log("====>",comment);
-    
+export const createComment = createAsyncThunk("/post/comment", async ({ postId, comment }, thunkAPI) => {
+    console.log("====>", comment);
+
     try {
-        const response = await api.post(`/api/post/comment/${postId}`,comment)
+        const response = await api.post(`/api/post/comment/${postId}`, comment)
         console.log(response.data);
-        
+
         return response.data;
     } catch (error) {
         const message = error.response && error.response.data.message
@@ -107,10 +111,12 @@ export const createComment = createAsyncThunk("/post/comment", async ({postId,co
     }
 })
 
-export const searchPost = createAsyncThunk("/post/search", async (title,page, thunkAPI) => {
+export const searchPost = createAsyncThunk("/post/search", async (reqData, thunkAPI) => {
     try {
-        const response = await api.post(`/post/search?title=${title}&page=${page}`)
-        return response.data;
+        const response = await axios.get(`${API_BASE_URL}/post/search?title=${reqData.title}&page=${reqData.page}`)
+        // console.log("data = > ",response.data);
+        
+        return response.data;   
     } catch (error) {
         const message = error.response && error.response.data.message
             ? error.response.data.message
@@ -118,11 +124,86 @@ export const searchPost = createAsyncThunk("/post/search", async (title,page, th
         return thunkAPI.rejectWithValue(message);
     }
 })
+
+export const getPopularPost = createAsyncThunk("/posts/popular", async (thunkAPI) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/posts/popular`)
+        return response.data
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+export const getLatestPost = createAsyncThunk("/posts/latest", async (thunkAPI) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/posts/latest`)
+        return response.data
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+export const getRandomPosts = createAsyncThunk("/posts/random", async (thunkAPI) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/random-post`)
+        console.log("data => ", response.data);
+
+        return response.data
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+export const getPostByCategory = createAsyncThunk("/posts/category", async (category, thunkAPI) => {
+
+    try {
+        const response = await axios.get(`${API_BASE_URL}/post/category?category=${category}`)
+        console.log("cat4egory => ", category);
+        console.log("data => ", response.data);
+        return response.data
+
+
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+export const updatePost = createAsyncThunk("api/post/update", async (data, thunkAPI) => {
+    try {
+        console.log("updated data=> ",data);
+        
+        const response = await api.put(`/api/post/update`,data)
+        console.log("response", response.data);
+
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
 
 const postSlice = createSlice({
     name: 'post',
     initialState,
-    reducers: {},
+    reducers: {
+        setPosts: (state, action) => {
+            state.posts = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getAllPost.pending, (state) => {
@@ -137,22 +218,16 @@ const postSlice = createSlice({
                 state.posts = action.payload;
             })
             .addCase(likePost.fulfilled, (state, action) => {
-                const likedPost = action.payload;
-                if (state.singlePost && state.singlePost._id === likedPost._id) {
-                    state.singlePost = likedPost;
-                }
-                state.posts = state.posts.map((post) =>
-                    post._id === likedPost._id ? likedPost : post
-                );
+                // const updatedPost = action.payload;
+                // console.log("posts => ", state.posts)
+                state.singlePost=action.payload
+
             })
+
+
             .addCase(disLikePost.fulfilled, (state, action) => {
-                const dislikedPost = action.payload;
-                if (state.singlePost && state.singlePost._id === dislikedPost._id) {
-                    state.singlePost = dislikedPost;
-                }
-                state.posts = state.posts.map((post) =>
-                    post._id === dislikedPost._id ? dislikedPost : post
-                );
+                // const dislikedPost = action.payload;
+                state.singlePost=action.payload
             })
             .addCase(getPostById.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -169,14 +244,30 @@ const postSlice = createSlice({
                 state.isLoading = false
                 state.message = action.payload
             })
-            .addCase(searchPost.fulfilled,(state,action)=>{
-                state.isLoading=false
-                state.isError=false
-                state.posts=action.payload
+            .addCase(searchPost.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.searchResult = action.payload
             })
+            .addCase(getPopularPost.fulfilled, (state, action) => {
+                state.popularPost = action.payload
+            })
+            .addCase(getLatestPost.fulfilled, (state, action) => {
+                state.latestPost = action.payload
+            })
+            .addCase(getRandomPosts.fulfilled, (state, action) => {
+                state.posts = action.payload
+            })
+            .addCase(getPostByCategory.fulfilled, (state, action) => {
+                state.posts = action.payload
+            })
+            .addCase(createComment.fulfilled, (state, action) => {
+                state.singlePost = action.payload;
+            })
+            .addCase(createComment.rejected, (state, action) => {
+                console.error("Error creating comment:", action.payload);
+            });
             ;
-
-
     },
 });
 

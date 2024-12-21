@@ -11,6 +11,7 @@ const initialState = {
     isAuthenticated:false,
     isLoginSuccess: false,
     isRegisterSuccess: false,
+    isLoginFailed:false,
     message: '',
 };
 
@@ -87,7 +88,7 @@ const authSlice = createSlice({
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;
-                state.isError = true;
+                state.isLoginFailed = true;
                 state.message = action.payload;
             })
             .addCase(signup.pending, (state) => {

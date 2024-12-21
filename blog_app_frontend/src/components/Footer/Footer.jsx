@@ -16,7 +16,7 @@ const Footer = () => {
                         <div>
                             <h1 className='text-white font-extrabold text-4xl py-2'>WRITE<span className='text-orange-500'>UP</span></h1>
                             
-                            <p ><EmailIcon/> codecraft@gmail.com</p>
+                            <p ><EmailIcon/> writeup@gmail.com</p>
                             <p className='py-2'><LocalPhoneIcon/> 9568842385</p>
                             <div className='flex'>
                                 <ul className='list-none p-0 m-0 flex '>
@@ -82,7 +82,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className='bg-[#333333] text-sm py-2 font-normal text-center'>
-                    <p>@2020 codecraft</p>
+                    <p>@2024 writeup</p>
                 </div>
             </footer>
         </div>

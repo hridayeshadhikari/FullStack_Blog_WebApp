@@ -4,6 +4,8 @@ import org.rest.blog_app_backend.entity.Comment;
 import org.rest.blog_app_backend.entity.Post;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface PostService {
 
     Post createPost(Post post,String jwt);
@@ -21,4 +23,12 @@ public interface PostService {
     Page<Post> getAllPost(int pageNumber, int pageSize);
 
     Page<Post> getPostBySearch(String title,int pageNumber,int pageSize);
+
+    List<Post> getPostByDate();
+
+    List<Post> getPopularPost();
+
+    List<Post> getRandomPost();
+
+    Page<Post> getPostByCategory(String category,int pageNumber,int pageSize);
 }

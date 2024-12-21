@@ -4,13 +4,15 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { createComment, deletePost, disLikePost, getPostById, likePost } from "../../store/postSlice";
+import { createComment, deletePost, disLikePost, getLatestPost, getPostById, likePost } from "../../store/postSlice";
 import parse from "html-react-parser"
 import Box from '@mui/material/Box';
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { Button } from "@mui/material";
+import Comment from "../Comment";
+import { ToastContainer, toast } from 'react-toastify';
+import { Bounce } from "react-toastify";
 
 
 const style = {
@@ -33,11 +35,12 @@ export default function Post() {
     const postId = useParams()
     const dispatch = useDispatch()
     const post = useSelector(state => state.post.singlePost)
+    const { latestPost } = useSelector((state) => state.post)
     const { user } = useSelector(state => state.auth)
-    const [commentText,setCommentText]=React.useState('')
+    const [commentText, setCommentText] = React.useState('')
 
     // console.log("Postid",postId.postId);
-    // console.log("AAAAA",post);
+    console.log("AAAAA", post);
 
     const handleDeletePost = async (postId) => {
         try {
@@ -48,30 +51,52 @@ export default function Post() {
         }
     }
 
+    useEffect(() => {
+        dispatch(getLatestPost())
+    }, [])
 
-    const handleLikePost=(postId)=>{
-        dispatch(likePost(postId))
+
+    const handleLikePost = (postId) => {
+        if (user) {
+            dispatch(likePost(postId))
+        }
+        else {
+            toast("Please login to like the post!", {
+                type: "info",
+                autoClose: 3000,
+                position: "top-right"
+            });
+        }
     }
-    const handleDisLikePost=(postId)=>{
-        dispatch(disLikePost(postId))
+    const handleDisLikePost = (postId) => {
+        if (user) {
+            dispatch(disLikePost(postId))
+        }
+        else {
+            toast("Please login to dislike the post!", {
+                type: "info",
+                autoClose: 3000,
+                position: "top-right"
+            });
+        }
     }
 
-    const handleInputChange=(e)=>{
+    const handleInputChange = (e) => {
         setCommentText(e.target.value)
     }
 
-    const handleSubmit=()=>{
-        if(commentText.trim()){
-            const comment={
-                title:commentText.trim()
+    const handleSubmit = () => {
+        if (commentText.trim()) {
+            const comment = {
+                title: commentText.trim()
             }
             // console.log("comment ====>",comment);
             dispatch(createComment({ postId: post.postId, comment }));
             setCommentText('')
         }
-        else{
+        else {
             console.log("please enter comment");
-            
+
         }
     }
 
@@ -82,7 +107,8 @@ export default function Post() {
     // console.log("user====>",user);
 
     return (
-        <div className="py-10 max-w-[380px] md:max-w-[700px] lg:max-w-[1250px] mx-auto grid md:grid-cols-[2fr_.8fr] gap-8">
+        <div className="py-10 md:max-w-[700px] lg:max-w-[1250px] mx-auto grid md:grid-cols-[2fr_.8fr] gap-8">
+
             <div>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
@@ -94,7 +120,7 @@ export default function Post() {
                     {post?.author?.id === user?.id ? (
                         <div className="absolute right-6 top-6">
 
-                            <button onClick={()=>navigate(`/edit-post/${post.postId}`)} className="mr-3 bg-green-500 px-3 py-1 text-white rounded-lg">
+                            <button onClick={() => navigate(`/edit-post/${post.postId}`, { state: { post } })} className="mr-3 bg-green-500 px-3 py-1 text-white rounded-lg">
                                 Edit Post
                             </button>
 
@@ -118,27 +144,53 @@ export default function Post() {
                         </div>) : <div></div>
                     }
                 </div>
-                <div className="max-w-[700px] mx-auto mb-6 ">
+                <div className="max-w-[380px] md:max-w-[700px] mx-auto mb-6 ">
                     <h1 className="text-4xl font-bold">{post?.title}</h1>
                     <p className="mt-2 text-end text-sm">written by <u className='text-gray-400 underline decoration-blue-600 underline-offset-4 decoration-[1.5px]'>{post?.author?.firstName} {post?.author?.lastName}</u></p>
                     <div className="browser-css mt-8 ">
                         <p className="text-gray-600 font-medium">{parse(`${post?.content}`)}</p>
                     </div>
                     <div className='space-x-4 flex mt-4'>
-                        <p className='text-blue-600'><ThumbUpOffAltIcon onClick={()=>handleLikePost(post.postId)}/>{post?.liked.length}</p>
-                        <p className='text-red-500'><ThumbDownOffAltIcon onClick={()=>handleDisLikePost(post.postId)}/>{post?.disliked.length}</p>
+                        <p className='text-blue-600 cursor-pointer hover:text-gray-400'><ThumbUpOffAltIcon onClick={() => handleLikePost(post.postId)} />{post?.liked.length}</p>
+                        <p className='text-red-500 cursor-pointer hover:text-gray-400'><ThumbDownOffAltIcon onClick={() => handleDisLikePost(post.postId)} />{post?.disliked.length}</p>
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={3000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="light"
+                            transition={Bounce}
+                        />
                     </div>
-                    <div>
+                    <div className="w-[380px] mx-auto md:w-full">
                         <h2 className="text-white bg-blue-600 w-full p-1 mt-[60px]">LEAVE A REPLY</h2>
                         <input onChange={handleInputChange} className="p-4 border-[1.5px] w-full pb-[60px] outline-none focus:border-[1.5px]" type="text " placeholder="Write a comment ...." value={commentText} />
-                        <div className="border-[1.5px] w-full border-t-0  p-4 flex flex-col  items-end">
-                            <button onClick={handleSubmit}  className="border-[1.5px] p-1 px-4 text-gray-400 hover:bg-gray-200 hover:text-gray-500">Comment</button>
+                        <div className="border-[1.5px] w-full border-t-0  p-4 flex flex-col  items-end mb-10">
+                            <button onClick={handleSubmit} className="border-[1.5px] p-1 px-4 text-gray-400 hover:bg-gray-200 hover:text-gray-500">Comment</button>
+                        </div>
+                        <div className="space-y-4">
+                            <h1 className="font-bold text-lg mb-5 ">Comments...</h1>
+                            {
+                                post?.comments.length > 1 ? (
+                                    post?.comments?.map((item) => <Comment comment={item} />))
+                                    : (
+                                        <h1 className="text-center">No comments found</h1>
+                                    )
+                            }
                         </div>
                     </div>
                 </div>
 
             </div>
-            <Sidebar />
+            <div className="w-[380px] mx-auto md:w-full">
+                <Sidebar latestPost={latestPost} />
+            </div>
+
         </div>
     );
 }

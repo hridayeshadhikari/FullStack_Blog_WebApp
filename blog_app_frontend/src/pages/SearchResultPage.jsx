@@ -1,45 +1,65 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import Sidebar from '../components/sidebar/Sidebar';
 import SearchBox from '../components/search/SearchBox';
 import Trending from '../components/Trending/Trending';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { getLatestPost, getPopularPost, searchPost } from '../store/postSlice';
+import HomePostCard from '../components/HomePostCard';
 
 const SearchResultPage = () => {
-  return (
-    <div className="py-10 max-w-[380px] md:max-w-[700px] lg:max-w-[1250px] mx-auto grid md:grid-cols-[1.5fr_.8fr_.8fr] gap-8 ">
-            <div className='bg-white'>
-                <div className="w-full flex justify-center mb-4 relative  p-2 ">
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYGWNMGvnJomHJ7vegON0KrztBB8q9WsBDdg&s"
-                        alt=""
-                        className="rounded-xl h-[25rem]"
-                    />
 
-                    
-                        
-                </div>
-                <div className="max-w-[700px] mx-auto mb-6 p-10 pt-0 pb-2">
-                    <h1 className="text-4xl font-bold">nice</h1>
-                    <p className="mt-2 text-end text-sm">written by <u className='text-gray-400 underline decoration-blue-600 underline-offset-4 decoration-[1.5px]'>harry</u></p>
-                    <div className="browser-css mt-8 ">
-                        <p className="text-gray-600 font-medium">excellentr</p>
-                    </div>
-                    <div className='space-x-4 flex mt-4'>
-                        <p className='text-blue-600'><ThumbUpOffAltIcon />10</p>
-                        <p className='text-red-500'><ThumbDownOffAltIcon />10</p>
-                    </div>
-                </div>
+    const location = useLocation()
+    const dispatch = useDispatch()
+    const { searchResult ,latestPost,popularPost} = useSelector((state) => state.post)
 
-            </div>
-            <Sidebar />
+    const decodeQueryString = decodeURIComponent(location.search)
+    const searchParams = new URLSearchParams(decodeQueryString)
+    const title = searchParams.get('title')
+    const page = searchParams.get('page') || 1
+
+    const reqData = {
+        title: title,
+        page
+    }
+
+    useEffect(() => {
+        dispatch(searchPost(reqData))
+        dispatch(getLatestPost())
+        dispatch(getPopularPost())
+    }, [page, title])
+
+
+    // const { searchResult } = useSelector((state) => state.searchResult)
+
+    // console.log("yyyy", searchResult);
+
+
+    return (
+        <div className="py-10 max-w-[380px] md:max-w-[700px] lg:max-w-[1250px] mx-auto grid md:grid-cols-[1.5fr_.8fr_.8fr] gap-8 ">
+
             <div>
-            <SearchBox/>
-            <Trending/>
+                <div className='bg-white mb-8 p-4 text-xl text-gray-800 text-center'>
+                    <h1>Search Result for : <span className='text-blue-500 font-bold'>{title}</span></h1>
+                </div>
+                <div>
+                    {
+                        searchResult?.content?.map((item) => <HomePostCard key={item.title} post={item} />)
+                    }
+                </div>
+            </div>
+            <div>
+                <Sidebar latestPost={latestPost}/>
+            </div>
+            <div>
+                <SearchBox />
+                <Trending popularPost={popularPost}/>
             </div>
         </div>
-  )
+    )
 }
 
 export default SearchResultPage

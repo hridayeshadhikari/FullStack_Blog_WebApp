@@ -5,6 +5,9 @@ spring:
     name: blog_app_backend
   data:
     mongodb:
+
+      uri: mongodb://mongo:KXLUBYdJsZikjUspjIQoAQurIMujFNhc@autorack.proxy.rlwy.net:13257
+      database: my_blog_app
       host: localhost
       port: 27017
       database: my_blog_app

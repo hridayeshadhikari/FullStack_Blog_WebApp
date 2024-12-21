@@ -34,17 +34,17 @@ export default function Register() {
                 <h1 className="text-gray-400 font-extrabold text-6xl text-center ">Write<span className="text-orange-600">Up</span></h1>
                 <img className="h-[130px] w-[130px] mx-auto mb-5" src={peninhand} alt="" />
                 <div className="grid grid-cols-[1fr_1fr] gap-3">
-                    <input className="p-2 border-2 " placeholder="First Name"  {...register("firstName", { required: true })} />
+                    <input className="p-2 border-2 focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="First Name"  {...register("firstName", { required: true })} />
                     {errors.firstName && <span className="text-red-500">This field is required</span>}
 
-                    <input className="p-2 border-2 " placeholder="Last Name"  {...register("lastName", { required: true })} />
+                    <input className="p-2 border-2 focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Last Name"  {...register("lastName", { required: true })} />
                     {errors.lastName && <span className="text-red-500">This field is required</span>}
                 </div>
 
-                <input className="p-2 border-2 " placeholder="Email"  {...register("email", { required: true })} />
+                <input className="p-2 border-2 focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Email"  {...register("email", { required: true })} />
                 {errors.email && <span className="text-red-500">This field is required</span>}
 
-                <input className="p-2 border-2" placeholder="Password" {...register("password", { required: true })} />
+                <input className="p-2 border-2 focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Password" {...register("password", { required: true })} />
                 {errors.password && <span className="text-red-500">This field is required</span>}
 
 

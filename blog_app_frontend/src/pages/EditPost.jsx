@@ -1,21 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PostForm from '../components/postForm/PostForm'
-import { useDispatch,useSelector } from 'react-redux'
-import { getPostById } from '../store/postSlice'
-import { useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 const EditPost = () => {
 
-    const postId=useParams()
-    const dispatch=useDispatch()
-    const post=useSelector(state=>state.post.singlePost)
-
-    useEffect(()=>{
-        dispatch(getPostById(postId))
-    })
-
-    // console.log("post ====>",post);
-    
+    const location = useLocation();
+    const { post } = location.state || {};
+  
   return (
     <div className='max-w-[1250px] mx-auto py-10'>
       <PostForm post={post}/>

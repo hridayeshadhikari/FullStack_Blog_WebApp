@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -111,7 +112,7 @@ public class PostServiceImpl implements PostService {
         existingPost.setTitle(post.getTitle());
         existingPost.setContent(post.getContent());
         existingPost.setFeaturedImage(post.getFeaturedImage());
-        existingPost.setCategoryId(post.getCategoryId());
+        existingPost.setCategory(post.getCategory());
         return postRepository.save(existingPost);
     }
 
@@ -132,6 +133,31 @@ public class PostServiceImpl implements PostService {
     public Page<Post> getPostBySearch(String title,int pageNumber,int pageSize) {
         Pageable pageable=PageRequest.of(pageNumber,pageSize);
         Page<Post> getPost =postRepository.findByTitleContainingIgnoreCase(title,pageable);
+        System.out.println("getpost = > "+getPost);
+        return getPost;
+    }
+
+    @Override
+    public List<Post> getPostByDate() {
+        return postRepository.findTop10ByOrderByPostDateDesc();
+    }
+
+    @Override
+    public List<Post> getPopularPost() {
+        List<Post> posts=postRepository.findTop10ByOrderByLikedDesc();
+        return posts;
+    }
+
+    @Override
+    public List<Post> getRandomPost() {
+        return postRepository.findRandomPost();
+    }
+
+    @Override
+    public Page<Post> getPostByCategory(String category, int pageNumber, int pageSize) {
+        Pageable pageable=PageRequest.of(pageNumber,pageSize);
+        Page<Post> getPost=postRepository.findByCategoryContainingIgnoreCase(category,pageable);
+        System.out.println("post"+getPost);
         return getPost;
     }
 

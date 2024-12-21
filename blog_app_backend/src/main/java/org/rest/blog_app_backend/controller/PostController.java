@@ -82,7 +82,10 @@ public class PostController {
     public ResponseEntity<Post> updatePost(@RequestBody Post post,@RequestHeader("Authorization")String jwt){
         User user=userService.findUserByToken(jwt);
 
-        if(post.getAuthor().getId()!=user.getId()){
+        System.out.println(post);
+        if(!post.getAuthor().getId().equals(user.getId())){
+            System.out.println("author"+post.getAuthor().getId());
+            System.out.println("author1"+user.getId());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         Post updatedPost=postService.updatePost(post);
@@ -93,7 +96,7 @@ public class PostController {
     public ResponseEntity<Page<Post>> getPostByPage(@RequestParam(defaultValue = "1") int page,
                                                     @RequestParam(defaultValue = "4") int sizePerPage){
 
-        Page<Post> getPostByPage=postService.getAllPost(page,sizePerPage);
+        Page<Post> getPostByPage=postService.getAllPost(page-1,sizePerPage);
 
 
         return new ResponseEntity<>(getPostByPage,HttpStatus.OK);
@@ -101,10 +104,38 @@ public class PostController {
     }
 
     @GetMapping("/post/search")
-    public ResponseEntity<Page<Post>> getPostBySearch(@RequestParam String title,@RequestParam(defaultValue = "1") int pageNumber,
-                                                      @RequestParam(defaultValue = "4") int pageSize){
-        Page<Post> getPostBySearch=postService.getPostBySearch(title,pageNumber,pageSize);
-        return new ResponseEntity<>(getPostBySearch,HttpStatus.OK);
+    public ResponseEntity<Page<Post>> getPostBySearch(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "4") int pageSize) {
+        Page<Post> getPostBySearch = postService.getPostBySearch(title, pageNumber - 1, pageSize);
+
+        return new ResponseEntity<>(getPostBySearch, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/posts/latest")
+    public ResponseEntity<List<Post>> getLatestPost(){
+        List<Post> posts=postService.getPostByDate();
+        return new ResponseEntity<>(posts,HttpStatus.OK);
+    }
+
+    @GetMapping("/posts/popular")
+    public ResponseEntity<List<Post>> getPopularPost(){
+        List<Post> posts=postService.getPopularPost();
+        return new ResponseEntity<>(posts,HttpStatus.OK);
+    }
+
+    @GetMapping("/random-post")
+    public ResponseEntity<List<Post>> getRandomPosts(){
+        List<Post> posts=postService.getRandomPost();
+        return new ResponseEntity<>(posts,HttpStatus.OK);
+    }
+
+    @GetMapping("/post/category")
+    public ResponseEntity<Page<Post>> getPostByCategory(@RequestParam String category,@RequestParam(defaultValue = "1")int pageNumber,@RequestParam(defaultValue = "4")int pageSize){
+        Page<Post> getPosts=postService.getPostByCategory(category,pageNumber-1,pageSize);
+        return new ResponseEntity<>(getPosts,HttpStatus.OK);
     }
 
 }
