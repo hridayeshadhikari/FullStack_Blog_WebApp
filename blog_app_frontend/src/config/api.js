@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export const API_BASE_URL="http://localhost:2003"
+export const API_BASE_URL="https://peaceful-motivation-production.up.railway.app"
 
 const jwtToken=localStorage.getItem("token")
 
