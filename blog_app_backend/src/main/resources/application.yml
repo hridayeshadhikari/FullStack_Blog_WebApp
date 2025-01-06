@@ -6,6 +6,6 @@ spring:
   data:
     mongodb:
 
-      uri: mongodb://mongo:KXLUBYdJsZikjUspjIQoAQurIMujFNhc@autorack.proxy.rlwy.net:13257
-      database: my_blog_app
+      uri: mongodb+srv://hs4939591:uglYC5oEiDoWQSwv@cluster0.phr7d.mongodb.net/
+      database: Blog_App
 
