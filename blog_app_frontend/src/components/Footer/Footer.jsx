@@ -6,6 +6,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -15,9 +16,9 @@ const Footer = () => {
                     <div className='grid md:grid-cols-4 grid-cols-1 gap-10'>
                         <div>
                             <h1 className='text-white font-extrabold text-4xl py-2'>WRITE<span className='text-orange-500'>UP</span></h1>
-                            
-                            <p ><EmailIcon/> writeup@gmail.com</p>
-                            <p className='py-2'><LocalPhoneIcon/> 9568842385</p>
+
+                            <p ><EmailIcon /> writeup@gmail.com</p>
+                            <p className='py-2'><LocalPhoneIcon /> 9568842385</p>
                             <div className='flex'>
                                 <ul className='list-none p-0 m-0 flex '>
                                     <li>
@@ -55,29 +56,23 @@ const Footer = () => {
                                 </ul>
                             </div>
                         </div>
-                        <div className='flex flex-col'>
-                            <h1 className='pl-2 pt-2 pb-4 text-xl font-semibold'>Programs</h1>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> divide the number?</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two?</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
+                        <div className='flex flex-col pl-0 md:pl-12'>
+                            <h1 className='pt-2 pb-4 text-xl font-semibold '>Other Pages</h1>
+                            <Link to={'/about-us'} className='pb-2 font-thin  text-gray-300'>About us</Link>
+                            <Link to={'/privacy-policy'} className='pb-2 font-thin text-gray-300'>Privacy Policy</Link>
+                            <Link to={'/contact'} className='pb-2 font-thin  text-gray-300'>Contact us</Link>
                         </div>
                         <div className='flex flex-col'>
-                            <h1 className='pt-2 pb-4  pl-2 text-xl font-semibold'>Java</h1>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
+                            <h1 className='pt-2 pb-4 text-xl font-semibold'>Our contacts</h1>
+                            <p className='pb-8 font-thin text-gray-300'>Writeup Web Solutions
+                                , Uttarakhand India.</p>
+
+                            <p className='font-thin text-gray-300'>email us : contact@writeup.com</p>
                         </div>
-                        <div className='flex flex-col'  >
-                            <h1 className='pt-2 pb-4  pl-2 text-xl font-semibold'>Spring Boot</h1>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
-                            <a href="/a" className='pb-3 font-thin text-xl text-gray-300'><ArrowRightIcon/> Sum of two numbers</a>
+                        <div className='flex flex-col mt-12 space-y-6'  >
+                            <img className='h-12' src="https://img.setka.io/clients/D3SuW9_Vtk6NhYeFXfduUy55A4Dromkt/post_images/tiny-logo-2022071511014423.svg" alt="" />
+                            <img src="https://www.drupal.org/files/project-images/logo_191.png" alt="" />
+
                         </div>
                     </div>
                 </div>

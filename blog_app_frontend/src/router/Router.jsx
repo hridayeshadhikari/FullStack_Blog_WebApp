@@ -10,6 +10,8 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import EditPost from "../pages/EditPost";
 import SearchResultPage from "../pages/SearchResultPage";
 import Contact from "../pages/Contact";
+import PrivacyPolicy from "../pages/PrivacyPolicy";
+import About from "../pages/About";
 
 export const Router=createBrowserRouter([
     {
@@ -59,6 +61,14 @@ export const Router=createBrowserRouter([
             {
                 path:"/contact",
                 element:<Contact/>
+            },
+            {
+                path:"/privacy-policy",
+                element:<PrivacyPolicy/>
+            },
+            {
+                path:'/about-us',
+                element:<About/>
             }
         ]
     }

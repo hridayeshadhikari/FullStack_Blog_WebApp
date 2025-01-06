@@ -4,16 +4,17 @@ import { useNavigate } from "react-router-dom";
 import RTE from "../RTE";
 import { UploadToCloud } from "../../Utils/UploadToCloud";
 import CircularProgress from '@mui/material/CircularProgress';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import { createPost, updatePost } from "../../store/postSlice";
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { toast, ToastContainer, Bounce } from 'react-toastify'; // Import toast
 
 export default function PostForm({ post }) {
-    const { register, handleSubmit, setValue, control, getValues } = useForm({
+    const { register, handleSubmit, setValue, control, getValues, reset } = useForm({
         defaultValues: {
             title: post?.title || "",
             content: post?.content || "",
@@ -24,16 +25,13 @@ export default function PostForm({ post }) {
 
     const [selectedImage, setSelectedImage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
     const dispatch = useDispatch();
-
-
+    const navigate = useNavigate(); // Optional if you want to redirect after success
 
     const handleSelectImage = async (event) => {
         setIsLoading(true);
         try {
             const imageUrl = await UploadToCloud(event.target.files[0], "image");
-            console.log(imageUrl);
             setSelectedImage(imageUrl);
             setValue("featuredImage", imageUrl);
         } catch (error) {
@@ -49,8 +47,7 @@ export default function PostForm({ post }) {
         }
     }, [post]);
 
-    const submit = (data) => {
-        console.log("Selected Category on Submit: ", data.category);
+    const submit = async (data) => {
         if (post) {
             const updatedData = {
                 ...post,
@@ -59,14 +56,20 @@ export default function PostForm({ post }) {
                 category: data.category !== post.category ? data.category : post.category,
                 featuredImage: data.featuredImage !== post.featuredImage ? data.featuredImage : post.featuredImage,
             };
-            dispatch(updatePost(updatedData));
-        }
-        else {
-            console.log("data");
+            await dispatch(updatePost(updatedData));
+            toast.success('Post updated successfully! redirecting');
+            setTimeout(() => {
+                navigate("/post/post.postId")
+            }, 2500)
 
-            dispatch(createPost(data))
+        } else {
+            await dispatch(createPost(data));
+            toast.success('Post created successfully!');
+            setTimeout(() => {
+                navigate("/post/post.postId")
+            }, 2500)
         }
-        // console.log(data);
+        reset();
     };
 
     const [category, setCategory] = React.useState(post?.category || "");
@@ -75,16 +78,28 @@ export default function PostForm({ post }) {
         const selectedCategory = event.target.value;
         setCategory(selectedCategory);
         setValue("category", selectedCategory);
-        console.log("category ==> ", selectedCategory);
     };
 
     return (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
+            <ToastContainer
+                position="top-right"
+                autoClose={1500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Bounce}
+            />
             <div className="md:w-2/3 px-2">
                 <label>Title :</label>
                 <input
                     placeholder="Title"
-                    className="mb-4 border-2 w-full p-2 mt-2 outline-none focus:border-2 "
+                    className="mb-4 border-2 w-full p-2 mt-2 outline-none focus:border-2"
                     {...register("title", { required: true })}
                 />
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
@@ -130,7 +145,7 @@ export default function PostForm({ post }) {
                 {isLoading ? (
                     <CircularProgress color="inherit" />
                 ) : (
-                    selectedImage && <img src={selectedImage || featuredImage} alt="Uploaded" className="w-full rounded-lg" />
+                    selectedImage && <img src={selectedImage} alt="Uploaded" className="w-full rounded-lg" />
                 )}
 
                 <button type="submit" className="w-full bg-blue-600 rounded-lg my-3 text-white p-2">

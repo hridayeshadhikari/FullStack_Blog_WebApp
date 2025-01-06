@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Trending = ({ popularPost }) => {
 
@@ -12,7 +13,7 @@ const Trending = ({ popularPost }) => {
                 popularPost?.map((item) => 
                     (<div className='p-3 '>
                         <div className='border-b-2'>
-                            <a href="/a" className='font-semibold leading-normal hover:text-blue-600'>{item.title}</a>
+                            <Link to={`/post/${item.postId}`} className='font-semibold leading-normal hover:text-blue-600'>{item.title}</Link>
                         </div>
                     </div>)    
                 )

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from "../../store/authSlice"
+import { getUserFromToken, login } from "../../store/authSlice"
 import peninhand from '../../asset/peninhand.png'
 import { toast ,ToastContainer,Bounce} from 'react-toastify'
 
@@ -10,7 +10,7 @@ export default function Login() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {  isLoginSuccess ,isLoginFailed} = useSelector((state) => state.auth);
+    const {  isLoginSuccess ,isLoginFailed,user} = useSelector((state) => state.auth);
     const {
         register,
         handleSubmit,
@@ -19,7 +19,13 @@ export default function Login() {
 
 
     const onSubmit = (data) => {
-        dispatch(login(data))
+        dispatch(login(data)).then((res) => {
+            if (res.type === 'auth/login/fulfilled') {
+                dispatch(getUserFromToken()); 
+                console.log("user =>",user);
+                
+            }
+        });
     }
     if (isLoginSuccess) {
         localStorage.setItem("loginSuccess", "true")

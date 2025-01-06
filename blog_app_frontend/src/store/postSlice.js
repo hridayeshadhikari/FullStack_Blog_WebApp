@@ -10,6 +10,7 @@ const initialState = {
     posts: [],
     popularPost: [],
     latestPost: [],
+    postCreated: false,
     like: null,
     dislike: null,
     comment: null,
@@ -75,6 +76,8 @@ export const likePost = createAsyncThunk("/post/like", async (postId, thunkAPI) 
         const response = await api.post(`/api/post/like/${postId}`)
         return response.data;
     } catch (error) {
+        console.log("error");
+        
         const message = error.response && error.response.data.message
             ? error.response.data.message
             : error.message;
@@ -115,8 +118,8 @@ export const searchPost = createAsyncThunk("/post/search", async (reqData, thunk
     try {
         const response = await axios.get(`${API_BASE_URL}/post/search?title=${reqData.title}&page=${reqData.page}`)
         // console.log("data = > ",response.data);
-        
-        return response.data;   
+
+        return response.data;
     } catch (error) {
         const message = error.response && error.response.data.message
             ? error.response.data.message
@@ -182,9 +185,9 @@ export const getPostByCategory = createAsyncThunk("/posts/category", async (cate
 
 export const updatePost = createAsyncThunk("api/post/update", async (data, thunkAPI) => {
     try {
-        console.log("updated data=> ",data);
-        
-        const response = await api.put(`/api/post/update`,data)
+        console.log("updated data=> ", data);
+
+        const response = await api.put(`/api/post/update`, data)
         console.log("response", response.data);
 
     } catch (error) {
@@ -206,6 +209,9 @@ const postSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(createPost.fulfilled, (state) => {
+                state.postCreated=true;
+            })
             .addCase(getAllPost.pending, (state) => {
                 state.isLoading = true;
             })
@@ -220,14 +226,14 @@ const postSlice = createSlice({
             .addCase(likePost.fulfilled, (state, action) => {
                 // const updatedPost = action.payload;
                 // console.log("posts => ", state.posts)
-                state.singlePost=action.payload
+                state.singlePost = action.payload
 
             })
 
 
             .addCase(disLikePost.fulfilled, (state, action) => {
                 // const dislikedPost = action.payload;
-                state.singlePost=action.payload
+                state.singlePost = action.payload
             })
             .addCase(getPostById.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -267,7 +273,7 @@ const postSlice = createSlice({
             .addCase(createComment.rejected, (state, action) => {
                 console.error("Error creating comment:", action.payload);
             });
-            ;
+        ;
     },
 });
 

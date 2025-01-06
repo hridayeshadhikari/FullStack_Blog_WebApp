@@ -34,7 +34,7 @@ export default function Post() {
     const navigate = useNavigate()
     const postId = useParams()
     const dispatch = useDispatch()
-    const post = useSelector(state => state.post.singlePost)
+    const post = useSelector((state) => state.post.singlePost)
     const { latestPost } = useSelector((state) => state.post)
     const { user } = useSelector(state => state.auth)
     const [commentText, setCommentText] = React.useState('')
@@ -104,7 +104,7 @@ export default function Post() {
         dispatch(getPostById(postId.postId))
     }, [dispatch, postId])
 
-    // console.log("user====>",user);
+    console.log("user====>",user);
 
     return (
         <div className="py-10 md:max-w-[700px] lg:max-w-[1250px] mx-auto grid md:grid-cols-[2fr_.8fr] gap-8">

@@ -9,6 +9,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast, ToastContainer, Bounce } from 'react-toastify'
+import HomeCarousel from '../components/HomeCarousel'
 
 
 const Home = () => {
@@ -17,7 +18,7 @@ const Home = () => {
     const { posts, latestPost, popularPost } = useSelector((state) => state.post)
     useEffect(() => {
         const loginSuccess = localStorage.getItem("loginSuccess")
-        if (loginSuccess === 'true'){
+        if (loginSuccess === 'true') {
             toast.success('Login Success')
             setTimeout(() => {
                 localStorage.removeItem('loginSuccess');
@@ -60,7 +61,7 @@ const Home = () => {
     }
 
     return (
-        <div className='bg-gray-100'>
+        <div className='py-10 max-w-[1250px] mx-auto mt-5'>
             <ToastContainer
                 position="top-right"
                 autoClose={3000}
@@ -74,49 +75,49 @@ const Home = () => {
                 theme="light"
                 transition={Bounce}
             />
-            <div className='py-10 max-w-[1250px] mx-auto'>
-                <div className='grid  md:grid-cols-[.8fr_2fr_.8fr] grid-cols-1 gap-x-6 gap-y-6'>
-                    <div className='order-3 md:order-1 w-[380px] md:w-full mx-auto'>
-                        <Trending popularPost={popularPost} />
-                    </div>
-                    <div className='order-1 md:order-2'>
-                        <div className='bg-blue-500 py-[22px] md:w-full w-[380px] mx-auto'>
+            <HomeCarousel />
+            <div className='grid mt-10 md:grid-cols-[.8fr_2fr_.8fr] grid-cols-1 gap-x-6 gap-y-6'>
+                <div className='order-3 md:order-1 w-[380px] md:w-full mx-auto'>
+                    <Trending popularPost={popularPost} />
+                </div>
+                <div className='order-1 md:order-2'>
+                    <div className='bg-blue-500 py-[22px] md:w-full w-[380px] mx-auto'>
 
-                        </div>
-                        {
-                            posts?.content?.map((post) => <HomePostCard key={post.title} post={post} />)
-                        }
-                        <div className='flex justify-center py-10'>
-                            <Stack spacing={2}>
-                                <Pagination count={posts.totalPages} onChange={handlePaginationChange} variant="outlined" shape="rounded" />
-                            </Stack>
-                        </div>
                     </div>
-                    <div className='order-2 md:order-3 md:w-full w-[380px] mx-auto'>
-                        <SearchBox />
-                        <Sidebar latestPost={latestPost} />
+                    {
+                        posts?.content?.map((post) => <HomePostCard key={post.title} post={post} />)
+                    }
+                    <div className='flex justify-center py-10'>
+                        <Stack spacing={2}>
+                            <Pagination count={posts.totalPages} onChange={handlePaginationChange} variant="outlined" shape="rounded" />
+                        </Stack>
                     </div>
                 </div>
-                <h1 className='font-bold text-2xl border-b-[1px] pb-5 mt-8'>EXPLORE BY</h1>
-                <div className='grow flex md:flex-row flex-col my-5'>
-                    <div className='basis-[25%]'>
-                        <img onClick={() => handleNavigate("Programming")} className='h-[150px] w-[150px] mx-auto hover:scale-110 duration-500' src="https://cdn-icons-png.flaticon.com/512/1485/1485286.png" alt="" />
-                        <p className='font-bold text-xl text-center my-4'>Programming</p>
-                    </div>
-                    <div className='basis-[25%]'>
-                        <img onClick={() => handleNavigate("Education")} className='h-[150px] w-[150px] mx-auto hover:scale-110 duration-500' src="https://cdn-icons-png.flaticon.com/512/3778/3778120.png" alt="" />
-                        <p className='font-bold text-xl text-center my-4'>Education</p>
-                    </div>
-                    <div className='basis-[25%]'>
-                        <img onClick={() => handleNavigate("Sports")} className='h-[150px] w-[150px] mx-auto hover:scale-110 duration-500' src="https://cdn-icons-png.flaticon.com/512/8855/8855089.png" alt="" />
-                        <p className='font-bold text-xl text-center my-4'>Sports</p>
-                    </div>
-                    <div className='basis-[25%]'>
-                        <img onClick={() => handleNavigate("Gaming")} className='bg-gray-100 h-[150px] w-[150px] mx-auto hover:scale-110 duration-500' src="https://cdn-icons-png.flaticon.com/512/2946/2946159.png" alt="" />
-                        <p className='font-bold text-xl text-center my-4'>Gaming</p>
-                    </div>
+                <div className='order-2 md:order-3 md:w-full w-[380px] mx-auto'>
+                    <SearchBox />
+                    <Sidebar latestPost={latestPost} />
                 </div>
             </div>
+            <h1 className='font-bold text-2xl border-b-[1px] pb-5 mt-8'>EXPLORE BY</h1>
+            <div className='grow flex md:flex-row flex-col my-5'>
+                <div className='basis-[25%]'>
+                    <img onClick={() => handleNavigate("Programming")} className='h-[150px] w-[150px] mx-auto hover:scale-110 duration-500' src="https://cdn-icons-png.flaticon.com/512/1485/1485286.png" alt="" />
+                    <p className='font-bold text-xl text-center my-4'>Programming</p>
+                </div>
+                <div className='basis-[25%]'>
+                    <img onClick={() => handleNavigate("Education")} className='h-[150px] w-[150px] mx-auto hover:scale-110 duration-500' src="https://cdn-icons-png.flaticon.com/512/3778/3778120.png" alt="" />
+                    <p className='font-bold text-xl text-center my-4'>Education</p>
+                </div>
+                <div className='basis-[25%]'>
+                    <img onClick={() => handleNavigate("Sports")} className='h-[150px] w-[150px] mx-auto hover:scale-110 duration-500' src="https://cdn-icons-png.flaticon.com/512/8855/8855089.png" alt="" />
+                    <p className='font-bold text-xl text-center my-4'>Sports</p>
+                </div>
+                <div className='basis-[25%]'>
+                    <img onClick={() => handleNavigate("Gaming")} className='bg-gray-100 h-[150px] w-[150px] mx-auto hover:scale-110 duration-500' src="https://cdn-icons-png.flaticon.com/512/2946/2946159.png" alt="" />
+                    <p className='font-bold text-xl text-center my-4'>Gaming</p>
+                </div>
+            </div>
+
         </div>
     )
 }
