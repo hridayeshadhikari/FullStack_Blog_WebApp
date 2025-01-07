@@ -9,7 +9,6 @@ export const api = axios.create({
     },
 });
 
-// Add a request interceptor to dynamically set the Authorization header
 api.interceptors.request.use(
     (config) => {
         const jwtToken = localStorage.getItem("token");

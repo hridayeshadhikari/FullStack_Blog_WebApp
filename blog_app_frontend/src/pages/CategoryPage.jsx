@@ -105,7 +105,7 @@ const CategoryPage = () => {
             <div className='grid md:grid-cols-3 grid-cols-1 gap-4 my-5 '>
              
               {Array.isArray(postList) &&
-                postList.map((item) => <PostCard key={item.name} post={item} />)}
+                postList.map((item) => <PostCard key={item?.postId} post={item} />)}
             </div>
             {category && (
               <div className='flex justify-center py-10'>

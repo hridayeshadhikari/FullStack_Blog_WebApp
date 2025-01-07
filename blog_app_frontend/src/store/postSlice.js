@@ -46,7 +46,7 @@ export const getAllPost = createAsyncThunk("/posts", async (page, thunkAPI) => {
 export const getPostById = createAsyncThunk(`/post/getPostById`, async (postId, thunkAPI) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/post/${postId}`)
-        console.log("BBBB", response.data);
+        // console.log("BBBB", response.data);
         return response.data;
 
 
@@ -61,7 +61,7 @@ export const getPostById = createAsyncThunk(`/post/getPostById`, async (postId, 
 export const deletePost = createAsyncThunk("/post/delete", async (postId, thunkAPI) => {
     try {
         const response = await api.delete(`/api/post/delete/${postId}`)
-        console.log(response.data);
+        // console.log(response.data);
 
     } catch (error) {
         const message = error.response && error.response.data.message
@@ -88,7 +88,7 @@ export const likePost = createAsyncThunk("/post/like", async (postId, thunkAPI) 
 export const disLikePost = createAsyncThunk("/post/dislike", async (postId, thunkAPI) => {
     try {
         const response = await api.post(`/api/post/dislike/${postId}`)
-        console.log("disliked post ==> ", response.data);
+        // console.log("disliked post ==> ", response.data);
         return response.data;
     } catch (error) {
         const message = error.response && error.response.data.message
@@ -103,7 +103,7 @@ export const createComment = createAsyncThunk("/post/comment", async ({ postId, 
 
     try {
         const response = await api.post(`/api/post/comment/${postId}`, comment)
-        console.log(response.data);
+        // console.log(response.data);
 
         return response.data;
     } catch (error) {
@@ -155,7 +155,7 @@ export const getLatestPost = createAsyncThunk("/posts/latest", async (thunkAPI) 
 export const getRandomPosts = createAsyncThunk("/posts/random", async (thunkAPI) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/random-post`)
-        console.log("data => ", response.data);
+        // console.log("data => ", response.data);
 
         return response.data
     } catch (error) {
@@ -170,8 +170,8 @@ export const getPostByCategory = createAsyncThunk("/posts/category", async (cate
 
     try {
         const response = await axios.get(`${API_BASE_URL}/post/category?category=${category}`)
-        console.log("cat4egory => ", category);
-        console.log("data => ", response.data);
+        // console.log("cat4egory => ", category);
+        // console.log("data => ", response.data);
         return response.data
 
 
@@ -185,10 +185,10 @@ export const getPostByCategory = createAsyncThunk("/posts/category", async (cate
 
 export const updatePost = createAsyncThunk("api/post/update", async (data, thunkAPI) => {
     try {
-        console.log("updated data=> ", data);
+        // console.log("updated data=> ", data);
 
         const response = await api.put(`/api/post/update`, data)
-        console.log("response", response.data);
+        // console.log("response", response.data);
 
     } catch (error) {
         const message = error.response && error.response.data.message

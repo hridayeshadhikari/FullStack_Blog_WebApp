@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -40,7 +40,7 @@ export default function Post() {
     const [commentText, setCommentText] = React.useState('')
 
     // console.log("Postid",postId.postId);
-    console.log("AAAAA", post);
+    // console.log("AAAAA", post);
 
     const handleDeletePost = async (postId) => {
         try {
@@ -104,7 +104,7 @@ export default function Post() {
         dispatch(getPostById(postId.postId))
     }, [dispatch, postId])
 
-    console.log("user====>",user);
+    // console.log("user====>",user);
 
     return (
         <div className="py-10 md:max-w-[700px] lg:max-w-[1250px] mx-auto grid md:grid-cols-[2fr_.8fr] gap-8">
@@ -148,7 +148,7 @@ export default function Post() {
                     <h1 className="text-4xl font-bold">{post?.title}</h1>
                     <p className="mt-2 text-end text-sm">written by <u className='text-gray-400 underline decoration-blue-600 underline-offset-4 decoration-[1.5px]'>{post?.author?.firstName} {post?.author?.lastName}</u></p>
                     <div className="browser-css mt-8 ">
-                        <p className="text-gray-600 font-medium">{parse(`${post?.content}`)}</p>
+                        <div className="text-gray-600 font-medium">{parse(`${post?.content}`)}</div>
                     </div>
                     <div className='space-x-4 flex mt-4'>
                         <p className='text-blue-600 cursor-pointer hover:text-gray-400'><ThumbUpOffAltIcon onClick={() => handleLikePost(post.postId)} />{post?.liked.length}</p>
@@ -177,7 +177,7 @@ export default function Post() {
                             <h1 className="font-bold text-lg mb-5 ">Comments...</h1>
                             {
                                 post?.comments.length > 1 ? (
-                                    post?.comments?.map((item) => <Comment comment={item} />))
+                                    post?.comments?.map((item) => <Comment key={item?.commentId} comment={item} />))
                                     : (
                                         <h1 className="text-center">No comments found</h1>
                                     )

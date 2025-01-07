@@ -43,7 +43,8 @@ const HomePostCard = ({ post }) => {
                         <p className='text-red-500 '><ThumbDownOffAltIcon />{post.disliked?.length}</p>
                     </div>
                 </div>
-                <p className='text-gray-700'>{parse(post.content.split(' ').slice(0, 50).join(' '))}</p>
+                <div className='text-gray-700'>{parse(post.content.split(' ').slice(0, 50).join(' '))}</div>
+
                 <hr />
                 <div className='flex justify-between'>
                     <u className='text-gray-400 underline decoration-blue-600 underline-offset-4 decoration-[1.5px] hover:text-blue-600'><Link onClick={()=>handleNavigate(post?.postId)}>Continue reading</Link></u>

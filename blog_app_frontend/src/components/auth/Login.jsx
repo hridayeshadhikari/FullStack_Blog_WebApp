@@ -3,14 +3,15 @@ import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserFromToken, login } from "../../store/authSlice"
 import peninhand from '../../asset/peninhand.png'
-import { toast ,ToastContainer,Bounce} from 'react-toastify'
+import { ToastContainer, Bounce } from 'react-toastify'
+import { useEffect } from "react"
 
 
 export default function Login() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {  isLoginSuccess ,isLoginFailed,user} = useSelector((state) => state.auth);
+    const { isLoginSuccess, isLoginFailed, user } = useSelector((state) => state.auth);
     const {
         register,
         handleSubmit,
@@ -21,16 +22,18 @@ export default function Login() {
     const onSubmit = (data) => {
         dispatch(login(data)).then((res) => {
             if (res.type === 'auth/login/fulfilled') {
-                dispatch(getUserFromToken()); 
-                console.log("user =>",user);
-                
+                dispatch(getUserFromToken());
+                // console.log("user =>",user);
+
             }
         });
     }
-    if (isLoginSuccess) {
-        localStorage.setItem("loginSuccess", "true")
-        navigate('/')
-    }
+    useEffect(() => {
+        if (isLoginSuccess) {
+            localStorage.setItem("loginSuccess", "true");
+            navigate('/');
+        }
+    }, [isLoginSuccess, navigate]);
 
 
 
@@ -52,10 +55,10 @@ export default function Login() {
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col"  >
                 <h1 className="text-gray-400 font-extrabold text-6xl text-center">Write<span className="text-orange-600">Up</span></h1>
                 <img className="h-[130px] w-[130px] mx-auto mb-5" src={peninhand} alt="" />
-                <input className="p-2 border-2 focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Email"  {...register("email", { required: true })} />
+                <input className="p-2 border-2 focus:outline-none focus:ring-1 focus:ring-gray-400" id="email" name="email" placeholder="Email"  {...register("email", { required: true })} />
                 {errors.email && <span className="text-red-500">This field is required</span>}
 
-                <input className="p-2 border-2 mt-8 focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Password" {...register("password", { required: true })} />
+                <input className="p-2 border-2 mt-8 focus:outline-none focus:ring-1 focus:ring-gray-400" id="password" name="password" placeholder="Password" {...register("password", { required: true })} />
                 {errors.password && <span className="text-red-500">This field is required</span>}
 
                 {isLoginFailed && <p className="text-red-600">wrong email or password</p>}

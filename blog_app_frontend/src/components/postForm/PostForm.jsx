@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import RTE from "../RTE";
 import { UploadToCloud } from "../../Utils/UploadToCloud";
 import CircularProgress from '@mui/material/CircularProgress';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { createPost, updatePost } from "../../store/postSlice";
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -100,6 +100,8 @@ export default function PostForm({ post }) {
                 <input
                     placeholder="Title"
                     className="mb-4 border-2 w-full p-2 mt-2 outline-none focus:border-2"
+                    id="title"
+                    name="title"
                     {...register("title", { required: true })}
                 />
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
@@ -139,6 +141,8 @@ export default function PostForm({ post }) {
                 <input
                     type="file"
                     className="mb-4 mt-2 w-full"
+                    id="image"
+                    name="image"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     onChange={handleSelectImage}
                 />

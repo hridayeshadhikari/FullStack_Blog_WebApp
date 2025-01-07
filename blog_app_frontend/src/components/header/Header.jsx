@@ -53,7 +53,7 @@ export default function Example() {
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between px-2 py-0.5 lg:px-8">
         <div className="flex lg:flex-1">
           <div className="flex flex-shrink-0 items-center">
-            <h1 className='font-bold text-white text-4xl'>Write<span className='text-orange-600'>Up</span></h1>
+            <h1 className='font-bold text-white text-4xl cursor-pointer' onClick={()=>navigate('/')}>Write<span className='text-orange-600'>Up</span></h1>
             <img className="pt-3 h-[60px] w-[55px] mx-auto mb-5" src={peninhand} alt="" />
           </div>
         </div>
