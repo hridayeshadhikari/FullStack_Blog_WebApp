@@ -32,7 +32,7 @@ const CategoryPage = () => {
     if (queryCategory) {
       setCategory(queryCategory);
     } else {
-      setCategory(''); 
+      setCategory('');
     }
   }, [location.search]);
 
@@ -61,7 +61,7 @@ const CategoryPage = () => {
     });
   };
 
- 
+
   const postList = category ? posts?.content : posts || [];
 
   return (
@@ -103,11 +103,19 @@ const CategoryPage = () => {
         <div className='grid md:grid-cols-[75%_25%] grid-cols-1 gap-6 '>
           <div>
             <div className='grid md:grid-cols-3 grid-cols-1 gap-4 my-5 '>
-             
-              {Array.isArray(postList) &&
-                postList.map((item) => <PostCard key={item?.postId} post={item} />)}
+
+              {Array.isArray(postList) && postList.length > 0 ?
+                postList.map((item) => <PostCard key={item?.postId} post={item} />) :
+                <div className="col-span-full flex justify-center">
+                  <img
+                    className="max-w-full max-h-full"
+                    src="https://cdni.iconscout.com/illustration/premium/thumb/young-lady-with-no-data-illustration-download-in-svg-png-gif-file-formats--found-result-girl-technology-results-pack-miscellaneous-illustrations-8881952.png"
+                    alt="Error"
+                  />
+                </div>
+              }
             </div>
-            {category && (
+            {postList?.length > 0 && category && (
               <div className='flex justify-center py-10'>
                 <Stack spacing={2}>
                   <Pagination
